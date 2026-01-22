@@ -11,7 +11,7 @@ const ProjectSection: React.FC = () => {
       type: "project",
       title: "Hezell.Space",
       subtitle: "Jakarta, Indonesia",
-      desc: "Custom AI Logic integrated with Google Search. Bridging static content with dynamic intelligence.",
+      desc: "Integrasi logika AI dengan Google Search untuk web yang lebih cerdas.",
       image: "/Achievements/thumbnail-hezell.png", 
       fallback: "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&q=80&w=800",
       color: "hover:border-blue-500/50",
@@ -26,7 +26,7 @@ const ProjectSection: React.FC = () => {
       subtitle: "Shanghai, China",
       image: "/Achievements/thumbnail-alibaba.jpeg",
       fallback: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=800",
-      desc: "Partnering with the world's leading cloud computing service provider for distributed system architecture.",
+      desc: "Mitra penyedia layanan cloud global untuk arsitektur sistem terdistribusi.",
       color: "hover:border-orange-500/50",
       glow: "hover:shadow-[0_0_30px_-10px_rgba(249,115,22,0.3)]"
     },
@@ -38,7 +38,7 @@ const ProjectSection: React.FC = () => {
       subtitle: "Shanghai, China",
       image: "/Achievements/sertificate-low-code.png",
       fallback: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&q=80&w=800",
-      desc: "Official certification demonstrating mastery in rapid application development and system architecture.",
+      desc: "Sertifikasi resmi dalam pengembangan aplikasi cepat dan arsitektur sistem.",
       color: "hover:border-cyan-500/50",
       glow: "hover:shadow-[0_0_30px_-10px_rgba(6,182,212,0.3)]"
     },
@@ -50,7 +50,7 @@ const ProjectSection: React.FC = () => {
       subtitle: "Shanghai, China",
       image: "/Achievements/thumbnail-peking.png",
       fallback: "https://images.unsplash.com/photo-1548003693-547c8960e190?auto=format&fit=crop&q=80&w=800",
-      desc: "One of the most prestigious universities in China. The environment where language mastery began.",
+      desc: "Universitas bergengsi di China, tempat perjalanan bahasa Mandarin dimulai.",
       color: "hover:border-red-500/50",
       glow: "hover:shadow-[0_0_30px_-10px_rgba(239,68,68,0.3)]"
     },
@@ -62,7 +62,7 @@ const ProjectSection: React.FC = () => {
       subtitle: "Shanghai, China",
       image: "/Achievements/sertificate-peking.png",
       fallback: "https://images.unsplash.com/photo-1515169273894-7e876dcf15ea?auto=format&fit=crop&q=80&w=800",
-      desc: "Official HSK 1 Certification awarded by Peking University. Validating foundational Mandarin skills.",
+      desc: "Sertifikasi resmi HSK 1 dari Peking University untuk kemampuan dasar Mandarin.",
       color: "hover:border-purple-500/50",
       glow: "hover:shadow-[0_0_30px_-10px_rgba(168,85,247,0.3)]"
     }
@@ -117,8 +117,9 @@ const ProjectSection: React.FC = () => {
               className={`group relative flex flex-col overflow-hidden border border-white/10 bg-white/5 rounded-3xl backdrop-blur-sm transition-all duration-500 ${item.color} ${item.glow} ${index === 0 ? 'md:col-span-2 lg:col-span-2' : ''}`}
             >
               {/* Image Section */}
-              <div className="w-full h-56 overflow-hidden relative">
-                <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-all duration-500 z-10" />
+              <div className="w-full h-64 overflow-hidden relative">
+                {/* Removed darker overlay, keeping minimal hover effect */}
+                <div className="absolute inset-0 bg-transparent z-10" />
                 
                 {/* Type Badge */}
                 <div className="absolute top-4 left-4 z-20">
@@ -137,13 +138,14 @@ const ProjectSection: React.FC = () => {
                         target.src = item.fallback;
                     }
                   }}
-                  className={`w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 ${item.type === 'certificate' ? 'grayscale group-hover:grayscale-0 object-top' : 'opacity-80 group-hover:opacity-100'}`}
+                  // Removed grayscale and opacity classes to keep images normal/full color
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                 />
               </div>
 
               {/* Content Section */}
               <div className="p-6 flex flex-col flex-grow relative z-20">
-                <div className="mb-4">
+                <div className="mb-3">
                   <h3 className="text-xl md:text-2xl font-bold tracking-tight text-gray-100 group-hover:text-white transition-colors">
                     {item.title}
                   </h3>
@@ -152,7 +154,7 @@ const ProjectSection: React.FC = () => {
                   </p>
                 </div>
                 
-                <p className="text-sm text-gray-500 leading-relaxed mb-6 line-clamp-3">
+                <p className="text-sm text-gray-400 leading-relaxed mb-6 line-clamp-3">
                   {item.desc}
                 </p>
 
