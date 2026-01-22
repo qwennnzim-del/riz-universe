@@ -16,7 +16,7 @@ const ProjectSection: React.FC = () => {
       fallback: "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&q=80&w=800",
       color: "hover:border-blue-500/50",
       glow: "hover:shadow-[0_0_30px_-10px_rgba(59,130,246,0.3)]",
-      link: "https://hezell-inc.vercel.app/"
+      link: "https://hezell-app.vercel.app/"
     },
     // ORGANIZATION: Alibaba Cloud (Thumbnail) - The Giver
     {
