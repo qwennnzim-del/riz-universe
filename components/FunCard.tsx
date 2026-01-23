@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { Minus, Plus } from 'lucide-react';
 
 const challenges = [
   "Chat teman random: 'Aku tau rahasiamu...'",
@@ -22,58 +23,125 @@ const challenges = [
 
 const FunCard: React.FC = () => {
   const [isFlipped, setIsFlipped] = useState(false);
-  const [currentChallenge, setCurrentChallenge] = useState(challenges[0]);
+  const [currentChallenge, setCurrentChallenge] = useState("Klik Generate!");
+  const [gachaCount, setGachaCount] = useState(1);
+  const [isAnimating, setIsAnimating] = useState(false);
 
-  const handleClick = () => {
-    // If currently open (flipped), and user clicks to close:
-    // We prepare a NEW random challenge for the NEXT time they open it.
-    if (isFlipped) {
+  // Counter logic
+  const increment = () => setGachaCount(prev => Math.min(prev + 1, 10));
+  const decrement = () => setGachaCount(prev => Math.max(prev - 1, 1));
+
+  // Gacha logic
+  const handleGenerate = () => {
+    if (isAnimating) return;
+    
+    setIsAnimating(true);
+    // Ensure card is flipped open to show the animation
+    if (!isFlipped) setIsFlipped(true);
+
+    let count = 0;
+    const maxSteps = gachaCount; // Determines how many times it changes visually
+    
+    // We want a clear interval that feels like a machine cycling
+    const interval = setInterval(() => {
+      // Pick a random challenge
       const randomIndex = Math.floor(Math.random() * challenges.length);
-      // Ensure it's not the exact same challenge to keep it fresh
-      let newChallenge = challenges[randomIndex];
-      if (newChallenge === currentChallenge) {
-         const nextIndex = (randomIndex + 1) % challenges.length;
-         newChallenge = challenges[nextIndex];
-      }
+      setCurrentChallenge(challenges[randomIndex]);
       
-      // We set timeout to change text only after card is closed (approx 300ms transition)
-      // so the user doesn't see the text swap while it's flipping back.
-      setTimeout(() => {
-        setCurrentChallenge(newChallenge);
-      }, 300);
-    }
+      count++;
+      
+      // Stop after N updates
+      if (count >= maxSteps) {
+        clearInterval(interval);
+        setIsAnimating(false);
+      }
+    }, 250); // Speed of the gacha shuffle
+  };
 
-    setIsFlipped(!isFlipped);
+  const handleCardClick = () => {
+    // Only allow manual flipping if not currently running the gacha
+    if (!isAnimating) {
+      setIsFlipped(!isFlipped);
+    }
   };
 
   return (
-    <div className={`fc-card ${isFlipped ? 'flipped' : ''}`} onClick={handleClick}>
-      <div className="fc-content">
-        
-        {/* The "Back" Face (Visible Initially) */}
-        <div className="fc-back">
-          <div className="fc-back-content">
-            <span className="animate-pulse">KLIK</span>
-            <span className="text-xs font-normal opacity-50 tracking-normal capitalize mt-[-20px]">Berani Gak?</span>
-          </div>
-        </div>
-
-        {/* The "Front" Face (Hidden Initially, Revealed on Click) */}
-        <div className="fc-front">
-          <div className="fc-circle" id="fc-bottom"></div>
-          <div className="fc-circle" id="fc-right"></div>
+    <div className="flex flex-col items-center gap-6">
+      
+      {/* CARD COMPONENT */}
+      <div className={`fc-card ${isFlipped ? 'flipped' : ''}`} onClick={handleCardClick}>
+        <div className="fc-content">
           
-          <div className="fc-front-content">
-            <div className="fc-description">
-              <div className="fc-title">
-                <p className="text-center text-sm md:text-base">{currentChallenge}</p>
-              </div>
-              <div className="text-[10px] text-center mt-3 text-white/50">
-                 (Klik lagi ganti tantangan)
+          {/* Back (Cover) */}
+          <div className="fc-back">
+            <div className="fc-back-content">
+              <span className="animate-pulse">KLIK</span>
+              <span className="text-xs font-normal opacity-50 tracking-normal capitalize mt-[-20px]">
+                Berani Gak?
+              </span>
+            </div>
+          </div>
+
+          {/* Front (Result) */}
+          <div className="fc-front">
+            <div className="fc-circle" id="fc-bottom"></div>
+            <div className="fc-circle" id="fc-right"></div>
+            
+            <div className="fc-front-content">
+              <div className="fc-description">
+                <div className="fc-title">
+                  <p className={`text-center text-sm md:text-base transition-all duration-100 ${isAnimating ? 'blur-[1px]' : ''}`}>
+                    {currentChallenge}
+                  </p>
+                </div>
+                {!isAnimating && (
+                   <div className="text-[10px] text-center mt-3 text-white/50">
+                     (Tutup & buka atau klik generate lagi)
+                   </div>
+                )}
               </div>
             </div>
           </div>
+
         </div>
+      </div>
+
+      {/* CONTROLS (Counter & Button) */}
+      <div className="flex flex-col items-center gap-2 z-50">
+        
+        {/* Counter UI */}
+        <div className="flex items-center gap-4 bg-black/40 backdrop-blur-md px-4 py-2 rounded-full border border-white/10">
+          <button 
+            onClick={decrement}
+            disabled={isAnimating || gachaCount <= 1}
+            className="w-8 h-8 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 active:scale-95 transition disabled:opacity-30"
+          >
+            <Minus size={14} />
+          </button>
+          
+          <span className="text-xl font-bold font-mono min-w-[20px] text-center">
+            {gachaCount}
+          </span>
+          
+          <button 
+            onClick={increment}
+            disabled={isAnimating || gachaCount >= 10}
+            className="w-8 h-8 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 active:scale-95 transition disabled:opacity-30"
+          >
+            <Plus size={14} />
+          </button>
+        </div>
+
+        {/* Generate Button using requested CSS */}
+        <button 
+          className="gradient-button"
+          onClick={handleGenerate}
+          disabled={isAnimating}
+        >
+          <span className="gradient-text">
+            {isAnimating ? 'Rolling...' : 'Generate Challenge'}
+          </span>
+        </button>
 
       </div>
     </div>
